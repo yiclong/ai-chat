@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -33,6 +34,7 @@ public class ChatService {
 
     private final ObjectMapper objectMapper;
     private final OkHttpClient okHttpClient;
+    private final Map<String, EventSource> activeEventSources = new ConcurrentHashMap<>();
 
     public ChatService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -43,11 +45,7 @@ public class ChatService {
                 .build();
     }
 
-    public void chatStream(String userMessage, SseEmitter emitter) {
-        chatStream(userMessage, null, emitter);
-    }
-
-    public void chatStream(String userMessage, String modelParam, SseEmitter emitter) {
+    public void chatStream(String userMessage, String modelParam, String sessionId, SseEmitter emitter) {
         ChatRequest request = new ChatRequest();
         String useModel = (modelParam != null && !modelParam.isEmpty()) ? modelParam : model;
         request.setModel(useModel);
@@ -75,10 +73,11 @@ public class ChatService {
                     .build();
 
             EventSource.Factory factory = EventSources.createFactory(okHttpClient);
-            factory.newEventSource(httpRequest, new EventSourceListener() {
+            EventSource eventSource = factory.newEventSource(httpRequest, new EventSourceListener() {
                 @Override
                 public void onOpen(EventSource eventSource, Response response) {
                     log.info("SSE connection opened");
+                    activeEventSources.put(sessionId, eventSource);
                 }
 
                 @Override
@@ -87,6 +86,7 @@ public class ChatService {
                     if ("[DONE]".equals(data)) {
                         log.info("Stream done");
                         emitter.complete();
+                        activeEventSources.remove(sessionId);
                         return;
                     }
                     try {
@@ -109,11 +109,13 @@ public class ChatService {
                 public void onClosed(EventSource eventSource) {
                     log.info("SSE connection closed");
                     emitter.complete();
+                    activeEventSources.remove(sessionId);
                 }
 
                 @Override
                 public void onFailure(EventSource eventSource, Throwable t, Response response) {
                     log.error("SSE failure: {}", t.getMessage());
+                    activeEventSources.remove(sessionId);
                     if (response != null) {
                         try {
                             String body = response.body().string();
@@ -141,5 +143,16 @@ public class ChatService {
             models.add(model);
         }
         return models;
+    }
+
+    public boolean stopChat(String sessionId) {
+        EventSource eventSource = activeEventSources.get(sessionId);
+        if (eventSource != null) {
+            eventSource.cancel();
+            activeEventSources.remove(sessionId);
+            log.info("Chat session stopped: {}", sessionId);
+            return true;
+        }
+        return false;
     }
 }
