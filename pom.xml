@@ -9,9 +9,9 @@
         <relativePath/>
     </parent>
     <groupId>com.ycl</groupId>
-    <artifactId>aichat</artifactId>
+    <artifactId>ai-chat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aichat</name>
+    <name>ai-chat</name>
     <description>AI Chat project for Spring Boot</description>
 
     <properties>

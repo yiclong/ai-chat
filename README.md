@@ -1,4 +1,4 @@
-# aiChat
+# ai-chat
 
 基于 Spring Boot 的 AI 聊天应用，支持流式响应和多模型切换。
 
