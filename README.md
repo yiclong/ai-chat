@@ -90,13 +90,13 @@ GET /api/chat/models
 src/main/java/com/ycl/aichat/
 ├── controller/             # 控制器
 │   └── ChatController.java
-├── dto/                    # 数据传输对象
+├── entity/                 # 实体类
 │   ├── ChatMessageRequest.java
 │   ├── ChatRequest.java
 │   └── Message.java
-├── service/                 # 服务层
+├── service/                # 服务层
 │   └── ChatService.java
-└── AiChatApplication.java   # 启动类
+└── AiChatApplication.java  # 启动类
 ```
 
 ## License

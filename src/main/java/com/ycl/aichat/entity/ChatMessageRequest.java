@@ -1,4 +1,4 @@
-package com.ycl.aichat.dto;
+package com.ycl.aichat.entity;
 
 import lombok.Data;
 

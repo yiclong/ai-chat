@@ -1,6 +1,6 @@
 package com.ycl.aichat.controller;
 
-import com.ycl.aichat.dto.ChatMessageRequest;
+import com.ycl.aichat.entity.ChatMessageRequest;
 import com.ycl.aichat.service.ChatService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

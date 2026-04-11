@@ -1,8 +1,8 @@
 package com.ycl.aichat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ycl.aichat.dto.ChatRequest;
-import com.ycl.aichat.dto.Message;
+import com.ycl.aichat.entity.ChatRequest;
+import com.ycl.aichat.entity.Message;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okhttp3.sse.EventSource;

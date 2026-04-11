@@ -1,4 +1,4 @@
-package com.ycl.aichat.dto;
+package com.ycl.aichat.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
