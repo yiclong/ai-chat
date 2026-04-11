@@ -1,9 +1,10 @@
 server:
   port: 9001
 spring:
-  thymeleaf:
-    encoding: UTF-8
-    cache: false
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
 openai:
   api-key: REDACTED
   base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
