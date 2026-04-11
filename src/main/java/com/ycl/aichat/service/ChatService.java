@@ -103,7 +103,7 @@ public class ChatService {
                     }
                     try {
                         emitter.send(SseEmitter.event().name("raw").data(data));
-                        com.fasterxml.jackson.databind.JsonNode delta = objectMapper.readTree(data)
+                        /*com.fasterxml.jackson.databind.JsonNode delta = objectMapper.readTree(data)
                                 .path("choices")
                                 .get(0)
                                 .path("delta");
@@ -114,7 +114,7 @@ public class ChatService {
                         if (!content.isEmpty()) {
                             log.info("Send content: {}", content);
                             emitter.send(SseEmitter.event().data(content));
-                        }
+                        }*/
                     } catch (Exception e) {
                         log.error("Parse error: {}", e.getMessage());
                     }
