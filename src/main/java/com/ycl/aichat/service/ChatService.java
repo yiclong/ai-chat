@@ -107,17 +107,13 @@ public class ChatService {
                                 .path("choices")
                                 .get(0)
                                 .path("delta");
-                        String content = delta.has("content") && !delta.get("content").isNull() 
+                        String content = delta.has("content") && !delta.get("content").isNull()
                                 ? delta.get("content").asText("") : "";
-                        String reasoningContent = delta.has("reasoning_content") && !delta.get("reasoning_content").isNull() 
+                        String reasoningContent = delta.has("reasoning_content") && !delta.get("reasoning_content").isNull()
                                 ? delta.get("reasoning_content").asText("") : "";
                         if (!content.isEmpty()) {
                             log.info("Send content: {}", content);
                             emitter.send(SseEmitter.event().data(content));
-                        }
-                        if (!reasoningContent.isEmpty()) {
-                            log.info("Send reasoning_content: {}", reasoningContent);
-                            emitter.send(SseEmitter.event().name("reasoning").data(reasoningContent));
                         }
                     } catch (Exception e) {
                         log.error("Parse error: {}", e.getMessage());
@@ -155,7 +151,7 @@ public class ChatService {
 
     public List<Map<String, Object>> getModels() {
         List<Map<String, Object>> models = new ArrayList<>();
-        String[] modelIds = {"glm-5", "MinMax-M2.7", "kimi2.5", "qwen3.6plus"};
+        String[] modelIds = {"glm-5", "qwen3.5-plus", "MiniMax-M2.5", "kimi-k2.5"};
         for (String modelId : modelIds) {
             Map<String, Object> model = new HashMap<>();
             model.put("id", modelId);
