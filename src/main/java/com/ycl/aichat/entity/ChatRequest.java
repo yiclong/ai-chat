@@ -9,7 +9,6 @@ import java.util.List;
 public class ChatRequest {
     private String model;
     private List<Message> messages;
-    private Double temperature;
     @JsonProperty("max_tokens")
     private Integer maxTokens;
     private Boolean stream = true;
