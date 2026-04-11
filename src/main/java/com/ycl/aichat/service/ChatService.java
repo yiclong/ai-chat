@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -131,33 +132,14 @@ public class ChatService {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> getModels() {
-        String url = baseUrl + "/models";
-        try {
-            Request httpRequest = new Request.Builder()
-                    .url(url)
-                    .header("Authorization", "Bearer " + apiKey)
-                    .header("Content-Type", "application/json")
-                    .get()
-                    .build();
-
-            try (Response response = okHttpClient.newCall(httpRequest).execute()) {
-                if (!response.isSuccessful()) {
-                    log.error("Get models failed: {}", response.code());
-                    return new ArrayList<>();
-                }
-                String body = response.body().string();
-                Map<String, Object> result = objectMapper.readValue(body, Map.class);
-                Object data = result.get("data");
-                if (data instanceof List) {
-                    return (List<Map<String, Object>>) data;
-                }
-                return new ArrayList<>();
-            }
-        } catch (Exception e) {
-            log.error("Get models error: ", e);
-            return new ArrayList<>();
+        List<Map<String, Object>> models = new ArrayList<>();
+        String[] modelIds = {"glm-5", "minmax-m2.7", "kimi2.5", "qwen3.6plus"};
+        for (String modelId : modelIds) {
+            Map<String, Object> model = new HashMap<>();
+            model.put("id", modelId);
+            models.add(model);
         }
+        return models;
     }
 }
