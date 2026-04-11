@@ -114,9 +114,9 @@ public class ChatService {
 
                 @Override
                 public void onFailure(EventSource eventSource, Throwable t, Response response) {
-                    log.error("SSE failure: {}", t.getMessage());
+                    log.error("SSE failure: {}", t != null ? t.getMessage() : "unknown");
                     activeEventSources.remove(sessionId);
-                    if (response != null) {
+                    if (response != null && response.body() != null) {
                         try {
                             String body = response.body().string();
                             log.error("Error response: {}", body);
@@ -125,7 +125,7 @@ public class ChatService {
                             log.error("Read error response failed", e);
                         }
                     }
-                    emitter.completeWithError(t);
+                    emitter.completeWithError(t != null ? t : new RuntimeException("Unknown error"));
                 }
             });
         } catch (Exception e) {
