@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ycl.aichat.entity.ChatRequest;
 import com.ycl.aichat.entity.Message;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
@@ -98,15 +102,21 @@ public class ChatService {
                         return;
                     }
                     try {
-                        String content = objectMapper.readTree(data)
+                        com.fasterxml.jackson.databind.JsonNode delta = objectMapper.readTree(data)
                                 .path("choices")
                                 .get(0)
-                                .path("delta")
-                                .path("content")
-                                .asText("");
+                                .path("delta");
+                        String content = delta.has("content") && !delta.get("content").isNull() 
+                                ? delta.get("content").asText("") : "";
+                        String reasoningContent = delta.has("reasoning_content") && !delta.get("reasoning_content").isNull() 
+                                ? delta.get("reasoning_content").asText("") : "";
                         if (!content.isEmpty()) {
                             log.info("Send content: {}", content);
                             emitter.send(SseEmitter.event().data(content));
+                        }
+                        if (!reasoningContent.isEmpty()) {
+                            log.info("Send reasoning_content: {}", reasoningContent);
+                            emitter.send(SseEmitter.event().name("reasoning").data(reasoningContent));
                         }
                     } catch (Exception e) {
                         log.error("Parse error: {}", e.getMessage());
