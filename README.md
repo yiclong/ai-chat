@@ -7,14 +7,11 @@
 - Java 8
 - Spring Boot 2.4.0
 - OkHttp 4.9.3 (SSE 流式请求)
-- Thymeleaf
-- WebSocket
 
 ## 功能特性
 
 - 支持多种 AI 模型切换
 - SSE 流式响应
-- WebSocket 实时通信
 - 可自定义模型参数
 
 ## 快速开始
@@ -87,30 +84,12 @@ GET /api/chat/models
 ]
 ```
 
-### 获取配置信息
-
-```
-GET /api/chat/config
-```
-
-响应示例：
-```json
-{
-  "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  "model": "qwen-turbo"
-}
-```
-
 ## 项目结构
 
 ```
 src/main/java/com/ycl/aichat/
-├── config/                 # 配置类
-│   ├── WebSocketConfig.java
-│   └── WebSocketServer.java
 ├── controller/             # 控制器
-│   ├── ChatController.java
-│   └── SystemController.java
+│   └── ChatController.java
 ├── dto/                    # 数据传输对象
 │   ├── ChatMessageRequest.java
 │   ├── ChatRequest.java
