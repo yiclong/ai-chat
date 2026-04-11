@@ -1,0 +1,32 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Title</title>
+</head>
+<body>
+hello world!
+
+</body>
+<script>
+    if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else{
+        console.log("您的浏览器支持WebSocket");
+        socket = new WebSocket("ws://"+location.host+"/websocket/"+[[${userId}]]);
+        socket.onopen = function() {
+            console.log("Socket 已打开");
+            socket.send("这是来自客户端的消息 ,url: " + location.href + "， 时间："+new Date());
+        };
+        socket.onmessage = function(msg) {
+            console.log("-----:"+msg.data);
+        };
+        socket.onclose = function() {
+            console.log("Socket已关闭");
+        };
+        socket.onerror = function() {
+            alert("Socket发生了错误");
+        }
+    }
+</script>
+</html>
