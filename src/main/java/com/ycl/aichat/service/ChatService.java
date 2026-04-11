@@ -144,7 +144,7 @@ public class ChatService {
 
     public List<Map<String, Object>> getModels() {
         List<Map<String, Object>> models = new ArrayList<>();
-        String[] modelIds = {"glm-5", "minmax-m2.7", "kimi2.5", "qwen3.6plus"};
+        String[] modelIds = {"glm-5", "MinMax-M2.7", "kimi2.5", "qwen3.6plus"};
         for (String modelId : modelIds) {
             Map<String, Object> model = new HashMap<>();
             model.put("id", modelId);
