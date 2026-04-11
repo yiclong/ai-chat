@@ -46,6 +46,14 @@ public class ChatService {
     }
 
     public void chatStream(String userMessage, String modelParam, String sessionId, SseEmitter emitter) {
+        try {
+            emitter.send(SseEmitter.event().name("session").data(sessionId));
+        } catch (Exception e) {
+            log.error("Send session error", e);
+            emitter.completeWithError(e);
+            return;
+        }
+
         ChatRequest request = new ChatRequest();
         String useModel = (modelParam != null && !modelParam.isEmpty()) ? modelParam : model;
         request.setModel(useModel);

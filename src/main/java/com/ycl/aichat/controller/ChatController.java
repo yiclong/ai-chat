@@ -25,12 +25,7 @@ public class ChatController {
         SseEmitter emitter = new SseEmitter(60000L);
         String sessionId = (request.getSessionId() != null && !request.getSessionId().isEmpty()) 
                 ? request.getSessionId() : UUID.randomUUID().toString();
-        try {
-            emitter.send(SseEmitter.event().name("session").data(sessionId));
-            chatService.chatStream(request.getMessage(), request.getModel(), sessionId, emitter);
-        } catch (Exception e) {
-            emitter.completeWithError(e);
-        }
+        chatService.chatStream(request.getMessage(), request.getModel(), sessionId, emitter);
         return emitter;
     }
 
